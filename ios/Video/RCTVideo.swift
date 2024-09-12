@@ -1648,7 +1648,7 @@ class RCTVideo: UIView, RCTVideoPlayerViewControllerDelegate, RCTPlayerObserverH
             }
 
             if onVideoTracks != nil {
-                let videoTracks = models.composeVideoTracksSummary(for: playerItem)
+                let videoTracks = models.composeVideoTracksSummary(for: playerItem).map { $0.asDict() }
                 if #available(iOS 14.0, *) {
                     Logger().info("👀 \(videoTracks)")
                 }
@@ -1701,7 +1701,7 @@ extension PlayerModels {
 
 }
 
-class VideoTrackSummaryUnit {
+class VideoTrackSummaryUnit: CustomStringConvertible {
     var file: String
     var codecs: String
     var selected: Bool
@@ -1710,5 +1710,21 @@ class VideoTrackSummaryUnit {
         self.file = file
         self.codecs = codecs
         self.selected = selected
+    }
+    
+    func asDict() -> [String: Any] {
+        return [
+            "file": file,
+            "codecs": codecs,
+            "selected": selected
+        ]
+    }
+    
+    func toggleSelected() {
+        selected.toggle()
+    }
+    
+    var description: String {
+        return "file: \(file), codecs: \(codecs), selected: \(selected)"
     }
 }
