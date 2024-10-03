@@ -1649,9 +1649,6 @@ class RCTVideo: UIView, RCTVideoPlayerViewControllerDelegate, RCTPlayerObserverH
 
             if onVideoTracks != nil {
                 let videoTracks = models.composeVideoTracksSummary(for: playerItem).map { $0.asDict() }
-                if #available(iOS 14.0, *) {
-                    Logger().info("👀 \(videoTracks)")
-                }
                 self.onVideoTracks?(["videoTracks": videoTracks])
             }
         }
