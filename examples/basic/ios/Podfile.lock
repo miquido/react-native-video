@@ -994,7 +994,7 @@ PODS:
   - React-Mapbuffer (0.74.3):
     - glog
     - React-debug
-  - "react-native-video (6.6.3+dolbyxp.1.7)":
+  - "react-native-video (6.6.3+dolbyxp.1.9)":
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1008,7 +1008,7 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
-    - "react-native-video/Video (= 6.6.3+dolbyxp.1.7)"
+    - "react-native-video/Video (= 6.6.3+dolbyxp.1.9)"
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1038,7 +1038,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - "react-native-video/Video (6.6.3+dolbyxp.1.7)":
+  - "react-native-video/Video (6.6.3+dolbyxp.1.9)":
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1413,7 +1413,6 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   hermes-engine:
     :podspec: "../node_modules/react-native/sdks/hermes-engine/hermes-engine.podspec"
-    :tag: hermes-2024-06-28-RNv0.74.3-7bda0c267e76d11b68a585f84cfdd65000babf85
   RCT-Folly:
     :podspec: "../node_modules/react-native/third-party-podspecs/RCT-Folly.podspec"
   RCTDeprecation:
@@ -1559,7 +1558,7 @@ SPEC CHECKSUMS:
   React-jsitracing: 1aa5681c353b41573b03e0e480a5adf5fa1c56d8
   React-logger: fa92ba4d3a5d39ac450f59be2a3cec7b099f0304
   React-Mapbuffer: 70da5955150a58732e9336a0c7e71cd49e909f25
-  react-native-video: 9249f04bd09cfd730c2b08b959a2bf0697695c92
+  react-native-video: 539a45d2deb89668c121d4ba8faa1cc6a71926e9
   react-native-video-plugin-sample: d3a93b7ad777cad7fa2c30473de75a2635ce5feb
   React-nativeconfig: 84806b820491db30175afbf027e99e8415dc63f0
   React-NativeModulesApple: 7b79212f8cf496ab554e0b7b09acbd4aa4690260

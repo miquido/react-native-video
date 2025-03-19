@@ -1633,26 +1633,23 @@ class RCTVideo: UIView, RCTVideoPlayerViewControllerDelegate, RCTPlayerObserverH
         }
     }
 
-    func handleTracksChange(playerItem _: AVPlayerItem, change _: NSKeyValueObservedChange<[AVPlayerItemTrack]>) {
-        guard let source = _source else { return }
-        if onTextTracks != nil {
-            Task {
+    func handleTracksChange(playerItem: AVPlayerItem, change _: NSKeyValueObservedChange<[AVPlayerItemTrack]>) {
+        Task {
+            guard let source = _source else { return }
+            if onTextTracks != nil {
                 let textTracks = await RCTVideoUtils.getTextTrackInfo(self._player)
                 self.onTextTracks?(["textTracks": extractJsonWithIndex(from: source.textTracks) ?? textTracks.compactMap(\.json)])
             }
-        }
+            guard let models = await RCTVideoUtils.getModels(player: _player) else { return }
 
-        Task {
-            if let models = await RCTVideoUtils.getModels(player: _player) {
-                if onAudioTracks != nil {
-                    let audioTracks = await RCTVideoUtils.getAudioTrackInfo(self._player, models: models)
-                    self.onAudioTracks?(["audioTracks": audioTracks])
-                }
+            if onAudioTracks != nil {
+                let audioTracks = await RCTVideoUtils.getAudioTrackInfo(self._player, models: models)
+                self.onAudioTracks?(["audioTracks": audioTracks])
+            }
 
-                if onVideoTracks != nil {
-                    let videoTracks = await RCTVideoUtils.getVideoTrackInfo(self._player, models: models)
-                    self.onVideoTracks?(["videoTracks": videoTracks])
-                }
+            if onVideoTracks != nil {
+                let videoTracks = models.composeVideoTracksSummary(for: playerItem).map { $0.asDict() }
+                self.onVideoTracks?(["videoTracks": videoTracks])
             }
         }
     }
@@ -1678,4 +1675,56 @@ class RCTVideo: UIView, RCTVideoPlayerViewControllerDelegate, RCTPlayerObserverH
     // Workaround for #3418 - https://github.com/TheWidlarzGroup/react-native-video/issues/3418#issuecomment-2043508862
     @objc
     func setOnClick(_: Any) {}
+}
+
+extension PlayerModels {
+    func composeVideoTracksSummary(for item: AVPlayerItem) -> [VideoTrackSummaryUnit] {
+        var result = [VideoTrackSummaryUnit]()
+
+        // swiftformat:disable:next isEmpty
+        guard let playlist = principalModel?.masterPlaylist, playlist.xStreamList.count > 0 else { return result } // swiftlint:disable:this empty_count
+        // swiftformat:disable:next isEmpty
+        guard let model, model.mainMediaPl.segmentList.count > 0 else { return result } // swiftlint:disable:this empty_count
+
+        guard let lastAccessLogInfo = item.accessLog()?.events.last else { return result }
+
+        let url = model.mainMediaPl.segmentList.segmentInfo(at: 0).uri.absoluteString
+
+        for i in 0 ... playlist.xStreamList.count {
+            guard let streamInfo = playlist.xStreamList.xStreamInf(at: i) else { continue }
+            let codecs = (streamInfo.codecs as NSArray).componentsJoined(by: ",")
+            result.append(.init(file: url, codecs: codecs, selected: streamInfo.bandwidth == Int(lastAccessLogInfo.indicatedBitrate)))
+        }
+        return result
+    }
+}
+
+// MARK: - VideoTrackSummaryUnit
+
+class VideoTrackSummaryUnit: CustomStringConvertible {
+    var file: String
+    var codecs: String
+    var selected: Bool
+
+    init(file: String, codecs: String, selected: Bool) {
+        self.file = file
+        self.codecs = codecs
+        self.selected = selected
+    }
+
+    func asDict() -> [String: Any] {
+        return [
+            "file": file,
+            "codecs": codecs,
+            "selected": selected,
+        ]
+    }
+
+    func toggleSelected() {
+        selected.toggle()
+    }
+
+    var description: String {
+        return "file: \(file), codecs: \(codecs), selected: \(selected)"
+    }
 }

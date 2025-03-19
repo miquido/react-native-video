@@ -1,3 +1,10 @@
+## [6.6.3+dolbyxp.1.9](https://github.com/miquido/react-native-video/compare/6.6.3+dolbyxp.1.8...miquido:react-native-video:6.6.3+dolbyxp.1.9)
+
+### Features
+
+* **iOS:** implemented onVideoTracks callback.
+
+
 ## [6.6.3+dolbyxp.1.8](https://github.com/miquido/react-native-video/compare/6.4.3+dolbyxp.1.8...miquido:react-native-video:6.6.3+dolbyxp.1.8)
 
 Sync with 6.6.3.
