@@ -6,48 +6,93 @@
 import Foundation
 
 public class ReactNativeVideoManager: RNVPlugin {
-    private let expectedMaxVideoCount = 10
-
-    // create a private initializer
-    private init() {}
+    private let expectedMaxVideoCount = 2
 
     public static let shared: ReactNativeVideoManager = .init()
+    public var pluginName: String = "ReactNativeVideoManager"
 
-    var instanceList: [RCTVideo] = Array()
-    var pluginList: [RNVPlugin] = Array()
+    private var instanceCount = 0
+    private var pluginList: Set<RNVPlugin> = Set()
+    private var customDRMManager: (RNVPlugin, DRMManagerSpec)?
 
     /**
-      * register a new ReactExoplayerViewManager in the managed list
+     * register a new view
      */
-    func registerView(newInstance: RCTVideo) {
-        if instanceList.count > expectedMaxVideoCount {
+    func registerView(newInstance _: RCTVideo) {
+        if instanceCount > expectedMaxVideoCount {
             DebugLog("multiple Video displayed ?")
         }
-        instanceList.append(newInstance)
+        instanceCount += 1
     }
 
     /**
-     * unregister existing ReactExoplayerViewManager in the managed list
+     * unregister existing view
      */
-    func unregisterView(newInstance: RCTVideo) {
-        if let i = instanceList.firstIndex(of: newInstance) {
-            instanceList.remove(at: i)
-        }
+    func unregisterView(newInstance _: RCTVideo) {
+        instanceCount -= 1
     }
 
     /**
      * register a new plugin in the managed list
      */
     public func registerPlugin(plugin: RNVPlugin) {
-        pluginList.append(plugin)
-        return
+        pluginList.insert(plugin)
+
+        maybeRegisterAVPlayerPlugin(plugin: plugin)
     }
 
-    public func onInstanceCreated(id: String, player: Any) {
+    public func unregisterPlugin(plugin: RNVPlugin) {
+        pluginList.remove(plugin)
+
+        maybeUnregisterAVPlayerPlugin(plugin: plugin)
+    }
+
+    // MARK: - RNVPlugin methods
+
+    override public func onInstanceCreated(id: String, player: Any) {
         pluginList.forEach { it in it.onInstanceCreated(id: id, player: player) }
     }
 
-    public func onInstanceRemoved(id: String, player: Any) {
+    override public func onInstanceRemoved(id: String, player: Any) {
         pluginList.forEach { it in it.onInstanceRemoved(id: id, player: player) }
+    }
+
+    // MARK: - RNV AVPlayer plugin specific methods
+
+    /**
+     * If a custom DRM manager is registered through a plugin, it will be used
+     * Otherwise, the default DRMManager will be used
+     */
+    public func getDRMManager() -> DRMManagerSpec? {
+        return customDRMManager?.1 ?? DRMManager()
+    }
+
+    // MARK: - Helper methods
+
+    func maybeRegisterAVPlayerPlugin(plugin: RNVPlugin) {
+        guard let avpPlugin = plugin as? RNVAVPlayerPlugin else {
+            return
+        }
+
+        if let drmManager = avpPlugin.getDRMManager() {
+            if customDRMManager != nil {
+                DebugLog(
+                    "Multiple DRM managers registered. This is not supported. Using first registered manager."
+                )
+                return
+            }
+
+            customDRMManager = (plugin, drmManager)
+        }
+    }
+
+    func maybeUnregisterAVPlayerPlugin(plugin: RNVPlugin) {
+        guard let avpPlugin = plugin as? RNVAVPlayerPlugin else {
+            return
+        }
+
+        if customDRMManager?.0 == plugin {
+            customDRMManager = nil
+        }
     }
 }

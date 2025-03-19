@@ -2,6 +2,7 @@ import {type ConfigPlugin, createRunOncePlugin} from '@expo/config-plugins';
 import type {ConfigProps} from './@types';
 import {withNotificationControls} from './withNotificationControls';
 import {withAndroidExtensions} from './withAndroidExtensions';
+import {withAndroidPictureInPicture} from './withAndroidPictureInPicture';
 import {withAds} from './withAds';
 import {withBackgroundAudio} from './withBackgroundAudio';
 import {withPermissions} from '@expo/config-plugins/build/android/Permissions';
@@ -21,16 +22,29 @@ const withRNVideo: ConfigPlugin<ConfigProps> = (config, props = {}) => {
     );
   }
 
+  if (props.enableAndroidPictureInPicture) {
+    config = withAndroidPictureInPicture(
+      config,
+      props.enableAndroidPictureInPicture,
+    );
+  }
+
   if (props.androidExtensions != null) {
     config = withAndroidExtensions(config, props.androidExtensions);
   }
 
   if (props.enableADSExtension) {
-    config = withAds(config, props.enableADSExtension);
+    config = withAds(config, {
+      enableADSExtension: props.enableADSExtension,
+      testApp: props.reactNativeTestApp,
+    });
   }
 
   if (props.enableCacheExtension) {
-    config = withCaching(config, props.enableCacheExtension);
+    config = withCaching(config, {
+      enableCachingExtension: props.enableCacheExtension,
+      testApp: props.reactNativeTestApp,
+    });
   }
 
   if (props.enableBackgroundAudio) {

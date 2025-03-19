@@ -1,7 +1,7 @@
 # react-native-video
 🎬 `<Video>` component for React Native
 
-This repository is fork of [miquido.github.io/react-native-video/](https://miquido.github.io/react-native-video/).
+This repository is fork of [TheWidlarzGroup/react-native-video](https://github.com/TheWidlarzGroup/react-native-video).
 
 All modifications are described in `CHANGELOG.md` using version names with `+dolbyxp` suffix.
 
@@ -13,8 +13,6 @@ All modifications are described in `CHANGELOG.md` using version names with `+dol
 
 ## Documentation
 documentation is available at [miquido.github.io/react-native-video/](https://miquido.github.io/react-native-video/).
-
-**Warning:** Be aware that it might contain links to original docs.
 
 ## Instalation
 
@@ -61,3 +59,6 @@ var styles = StyleSheet.create({
   },
 });
 ```
+
+## Roadmap
+You can follow our work on the library at [Roadmap](https://github.com/orgs/TheWidlarzGroup/projects/6).

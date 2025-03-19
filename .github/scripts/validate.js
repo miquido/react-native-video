@@ -31,7 +31,7 @@ const BOT_LABELS = [
 const SKIP_LABEL = 'No Validation';
 
 const MESSAGE = {
-  FEATURE_REQUEST: `Thank you for your feature request. We will review it and get back to you if we need more information.`,
+  FEATURE_REQUEST: `Thanks for the feature request! Check out our roadmap [here](https://github.com/TheWidlarzGroup/react-native-video/discussions/3351). If your request is already there – great! If not, give us some time, and we'll get back to you with information on when TheWidlarzGroup can address it as part of our free open-source support. Alternatively, [contact us](https://www.thewidlarzgroup.com/?utm_source=rnv&utm_medium=feature-request&utm_campaign=bot&utm_id=bot-message#Contact) to discuss ways to speed up the process.`,
   BUG_REPORT: `Thank you for your bug report. We will review it and get back to you if we need more information.`,
   MISSING_INFO: (missingFields) => {
     return `Thank you for your issue report. Please note that the following information is missing or incomplete:\n\n${missingFields
@@ -267,11 +267,15 @@ const hidePreviousComments = async ({github, context}) => {
     issue_number: context.payload.issue.number,
   });
 
-  const botComments = comments.data.filter(
-    (comment) => comment.user.type === 'Bot',
+  // Filter for bot comments that aren't already hidden
+  const unhiddenBotComments = comments.data.filter(
+    (comment) =>
+      comment.user.type === 'Bot' &&
+      !comment.body.includes('<details>') &&
+      !comment.body.includes('Previous bot comment'),
   );
 
-  for (const comment of botComments) {
+  for (const comment of unhiddenBotComments) {
     // Don't format string - it will broke the markdown
     const hiddenBody = `
 <details>

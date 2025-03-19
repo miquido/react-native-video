@@ -1,4 +1,5 @@
 import React from 'react';
+import TWGBadge from './components/TWGBadge/TWGBadge';
 
 export default {
   head: (
@@ -26,11 +27,10 @@ export default {
         content="https://miquido.github.io/react-native-video/thumbnail.jpg"
       />
       <meta name="twitter:image:alt" content="React Native Video" />
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin />
       <link
-        href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap"
-        rel="stylesheet"
+        rel="icon"
+        type="image/png"
+        href="https://docs.thewidlarzgroup.com/react-native-video/favicon.png"
       />
     </>
   ),
@@ -39,19 +39,29 @@ export default {
       🎬 <strong>Video component</strong> for React Native
     </span>
   ),
-  faviconGlyph: '🎬',
   project: {
     link: 'https://github.com/miquido/react-native-video',
   },
   docsRepositoryBase:
     'https://github.com/miquido/react-native-video/tree/main-dxp/docs',
+  main: ({children}) => (
+    <>
+      {children}
+      <TWGBadge visibleOnLarge={false} />
+    </>
+  ),
+  toc: {
+    extraContent: <TWGBadge visibleOnLarge={true} />,
+  },
   footer: {
     text: (
       <span>
-        Built with ❤️ by <strong>React Native Community</strong>
+        Built with ❤️ by <strong>TheWidlarzGroup</strong> &{' '}
+        <strong>React Native Community</strong>
       </span>
     ),
   },
+
   useNextSeoProps() {
     return {
       titleTemplate: '%s – Video',

@@ -4,10 +4,7 @@ import type {
   Float,
   UnsafeObject,
 } from 'react-native/Libraries/Types/CodegenTypes';
-
-export type VideoSaveData = {
-  uri: string;
-};
+import type {VideoSaveData} from '../types/video-ref';
 
 // @TODO rename to "Spec" when applying new arch
 export interface VideoManagerType {
@@ -24,7 +21,10 @@ export interface VideoManagerType {
     licenseUrl: string,
   ) => Promise<void>;
   setFullScreenCmd: (reactTag: Int32, fullScreen: boolean) => Promise<void>;
+  setSourceCmd: (reactTag: Int32, source?: UnsafeObject) => Promise<void>;
   setVolumeCmd: (reactTag: Int32, volume: number) => Promise<void>;
+  enterPictureInPictureCmd: (reactTag: number) => Promise<void>;
+  exitPictureInPictureCmd: (reactTag: number) => Promise<void>;
   save: (reactTag: Int32, option: UnsafeObject) => Promise<VideoSaveData>;
   getCurrentPosition: (reactTag: Int32) => Promise<Int32>;
 }
