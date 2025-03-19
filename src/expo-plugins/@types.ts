@@ -1,9 +1,15 @@
 export type ConfigProps = {
+  reactNativeTestApp?: boolean;
   /**
    * Whether to require permissions to be able to use notification controls.
    * @default false
    */
   enableNotificationControls?: boolean;
+  /**
+   * Apply configs to be able to use Picture-in-picture on Android.
+   * @default false
+   */
+  enableAndroidPictureInPicture?: boolean;
   /**
    * Whether to enable background audio feature.
    * @default false
@@ -12,13 +18,13 @@ export type ConfigProps = {
   /**
    * Whether to include ADS extension in the app (IMA SDK)
    * @default false
-   * @see https://thewidlarzgroup.github.io/react-native-video/component/ads
+   * @see https://docs.thewidlarzgroup.com/react-native-video/component/ads
    */
   enableADSExtension?: boolean;
   /**
    * Whether to enable cache extension for ios in the app.
    * @default false
-   * @see https://thewidlarzgroup.github.io/react-native-video/other/caching
+   * @see https://docs.thewidlarzgroup.com/react-native-video/other/caching
    */
   enableCacheExtension?: boolean;
   /**

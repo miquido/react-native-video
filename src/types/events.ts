@@ -18,6 +18,8 @@ import type {
   OnVolumeChangeData,
 } from '../specs/VideoNativeComponent';
 
+export type * from '../specs/VideoNativeComponent';
+
 export type AudioTrack = OnAudioTracksData['audioTracks'][number];
 export type TextTrack = OnTextTracksData['textTracks'][number];
 export type VideoTrack = OnVideoTracksData['videoTracks'][number];
@@ -282,7 +284,7 @@ export interface ReactVideoEvents {
   onLoadStart?: (e: OnLoadStartData) => void; //All
   onPictureInPictureStatusChanged?: (
     e: OnPictureInPictureStatusChangedData,
-  ) => void; //iOS
+  ) => void; //Android, iOS
   onPlaybackRateChange?: (e: OnPlaybackRateChangeData) => void; //All
   onVolumeChange?: (e: OnVolumeChangeData) => void; //Android, iOS
   onProgress?: (e: OnProgressData) => void; //All

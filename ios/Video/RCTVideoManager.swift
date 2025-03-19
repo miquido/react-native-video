@@ -72,6 +72,27 @@ class RCTVideoManager: RCTViewManager {
         })
     }
 
+    @objc(enterPictureInPictureCmd:)
+    func enterPictureInPictureCmd(_ reactTag: NSNumber) {
+        performOnVideoView(withReactTag: reactTag, callback: { videoView in
+            videoView?.enterPictureInPicture()
+        })
+    }
+
+    @objc(exitPictureInPictureCmd:)
+    func exitPictureInPictureCmd(_ reactTag: NSNumber) {
+        performOnVideoView(withReactTag: reactTag, callback: { videoView in
+            videoView?.exitPictureInPicture()
+        })
+    }
+
+    @objc(setSourceCmd:source:)
+    func setSourceCmd(_ reactTag: NSNumber, source: NSDictionary) {
+        performOnVideoView(withReactTag: reactTag, callback: { videoView in
+            videoView?.setSrc(source)
+        })
+    }
+
     @objc(save:options:resolve:reject:)
     func save(_ reactTag: NSNumber, options: NSDictionary, resolve: @escaping RCTPromiseResolveBlock, reject: @escaping RCTPromiseRejectBlock) {
         performOnVideoView(withReactTag: reactTag, callback: { videoView in
