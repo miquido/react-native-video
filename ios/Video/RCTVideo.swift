@@ -1633,12 +1633,12 @@ class RCTVideo: UIView, RCTVideoPlayerViewControllerDelegate, RCTPlayerObserverH
         }
     }
 
-    func handleTracksChange(playerItem: AVPlayerItem, change: NSKeyValueObservedChange<[AVPlayerItemTrack]>) {
+    func handleTracksChange(playerItem: AVPlayerItem, change _: NSKeyValueObservedChange<[AVPlayerItemTrack]>) {
         Task {
             guard let source = _source else { return }
             if onTextTracks != nil {
-                    let textTracks = await RCTVideoUtils.getTextTrackInfo(self._player)
-                    self.onTextTracks?(["textTracks": extractJsonWithIndex(from: source.textTracks) ?? textTracks.compactMap(\.json)])
+                let textTracks = await RCTVideoUtils.getTextTrackInfo(self._player)
+                self.onTextTracks?(["textTracks": extractJsonWithIndex(from: source.textTracks) ?? textTracks.compactMap(\.json)])
             }
             guard let models = await RCTVideoUtils.getModels(player: _player) else { return }
 
@@ -1678,25 +1678,28 @@ class RCTVideo: UIView, RCTVideoPlayerViewControllerDelegate, RCTPlayerObserverH
 }
 
 extension PlayerModels {
-
     func composeVideoTracksSummary(for item: AVPlayerItem) -> [VideoTrackSummaryUnit] {
         var result = [VideoTrackSummaryUnit]()
 
-        guard let playlist = principalModel?.masterPlaylist, playlist.xStreamList.count > 0 else { return result }
-        guard let model = model, model.mainMediaPl.segmentList.count > 0 else { return result }
+        // swiftformat:disable:next isEmpty
+        guard let playlist = principalModel?.masterPlaylist, playlist.xStreamList.count > 0 else { return result } // swiftlint:disable:this empty_count
+        // swiftformat:disable:next isEmpty
+        guard let model, model.mainMediaPl.segmentList.count > 0 else { return result } // swiftlint:disable:this empty_count
+
         guard let lastAccessLogInfo = item.accessLog()?.events.last else { return result }
 
         let url = model.mainMediaPl.segmentList.segmentInfo(at: 0).uri.absoluteString
 
-        for i in 0...playlist.xStreamList.count {
+        for i in 0 ... playlist.xStreamList.count {
             guard let streamInfo = playlist.xStreamList.xStreamInf(at: i) else { continue }
             let codecs = (streamInfo.codecs as NSArray).componentsJoined(by: ",")
             result.append(.init(file: url, codecs: codecs, selected: streamInfo.bandwidth == Int(lastAccessLogInfo.indicatedBitrate)))
         }
         return result
     }
-
 }
+
+// MARK: - VideoTrackSummaryUnit
 
 class VideoTrackSummaryUnit: CustomStringConvertible {
     var file: String
@@ -1708,19 +1711,19 @@ class VideoTrackSummaryUnit: CustomStringConvertible {
         self.codecs = codecs
         self.selected = selected
     }
-    
+
     func asDict() -> [String: Any] {
         return [
             "file": file,
             "codecs": codecs,
-            "selected": selected
+            "selected": selected,
         ]
     }
-    
+
     func toggleSelected() {
         selected.toggle()
     }
-    
+
     var description: String {
         return "file: \(file), codecs: \(codecs), selected: \(selected)"
     }
