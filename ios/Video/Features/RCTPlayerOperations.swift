@@ -131,12 +131,7 @@ enum RCTPlayerOperations {
             return
         }
         // If a match isn't found, option will be nil and text tracks will be disabled
-        #if os(tvOS)
-        // Do noting. Fix for tvOS native audio menu language selector
-        #else
-            // If a match isn't found, option will be nil and text tracks will be disabled
-            await player?.currentItem?.select(mediaOption, in: group)
-        #endif
+        await player?.currentItem?.select(mediaOption, in: group)
     }
 
     static func seek(

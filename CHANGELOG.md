@@ -1,3 +1,9 @@
+## [6.11.0+dolbyxp.1.10](https://github.com/miquido/react-native-video/compare/6.11.0+dolbyxp.1.9...miquido:react-native-video:6.11.0+dolbyxp.1.10)
+
+
+### Bug Fixes
+* **ios** Adjust RCTPlayerOperations - unify media selection for tvOS
+
 ## [6.11.0+dolbyxp.1.9](https://github.com/miquido/react-native-video/compare/6.6.3+dolbyxp.1.9...miquido:react-native-video:6.11.0+dolbyxp.1.9)
 
 Sync with 6.11.0.
